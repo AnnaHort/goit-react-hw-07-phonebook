@@ -7,6 +7,7 @@ import {
 } from './ContactList.styled';
 import { deleteContact, findContact } from 'redux/contactSlice';
 import { filterSelector, itemsSelector } from 'redux/selectors';
+import { deleteServerContact } from 'redux/operations';
 
 export const ContactList = () => {
   const items = useSelector(itemsSelector);
@@ -15,8 +16,14 @@ export const ContactList = () => {
   const dispatch = useDispatch();
 
   const handleDelete = contactId => {
-    dispatch(deleteContact(contactId));
-  };
+    dispatch(deleteServerContact(contactId))
+      .then(() => {
+        dispatch(deleteContact(contactId));
+      })
+      .catch(error => {
+        console.error('Failed to delete contact from server', error);
+      });
+  }
 
   const handleChange = e => {
     const inputValue = e.target.value;

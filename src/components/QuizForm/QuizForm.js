@@ -14,9 +14,7 @@ export const QuizForm = () => {
 
     const form = e.target;
     const newName = form.elements.name.value;
-    console.log(newName)
     const newPhoneNumber = form.elements.contacts.value; 
-    console.log(newPhoneNumber)
 
     const contactData = {
       name: newName,
