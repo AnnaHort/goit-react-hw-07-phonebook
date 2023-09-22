@@ -1,26 +1,25 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { ContactButton, ListContact, ListEl, StyledSearchInput } from './ContactList.styled';
+import {
+  ContactButton,
+  ListContact,
+  ListEl,
+  StyledSearchInput,
+} from './ContactList.styled';
 import { deleteContact, findContact } from 'redux/contactSlice';
-import { contactSelector, errorSelector, filterSelector, isLoadingSelector, itemsSelector } from 'redux/selectors';
+import { filterSelector, itemsSelector } from 'redux/selectors';
 
 export const ContactList = () => {
-  const contacts = useSelector(contactSelector);
-  console.log(contacts);
   const items = useSelector(itemsSelector);
-  console.log(items);
+  console.log('items=', items);
   const filter = useSelector(filterSelector);
-  console.log(filter);
-  const isLoading = useSelector(isLoadingSelector);
-  console.log(isLoading);
-  const error = useSelector(errorSelector)
-  console.log(error);
+  const itemsId = items.map(item => item.id);
+  console.log('itemsId =', itemsId);
 
   const dispatch = useDispatch();
 
   const handleDelete = contactId => {
     dispatch(deleteContact(contactId));
   };
-
 
   const handleChange = e => {
     const inputValue = e.target.value;
@@ -51,7 +50,9 @@ export const ContactList = () => {
             <ListEl key={items.id}>
               <p>{items.name}:</p>
               <p> {items.phoneNumber}</p>
-              <ContactButton onClick={() => handleDelete(items.id)}>Delete</ContactButton>
+              <ContactButton onClick={() => handleDelete(items.id)}>
+                Delete
+              </ContactButton>
             </ListEl>
           ))}
       </ListContact>

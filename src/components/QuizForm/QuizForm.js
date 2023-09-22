@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AddContactBtn, Container, InputEl, StyledForm } from './QuizForm.styled';
 import { addContact } from 'redux/contactSlice';
 import { itemsSelector } from 'redux/selectors';
+import { sendContact } from 'redux/operations';
 
 export const QuizForm = () => {
   const items = useSelector(itemsSelector);
@@ -32,6 +33,7 @@ export const QuizForm = () => {
 
       if (!contactExists) {
         dispatch(addContact(contactData));
+        dispatch(sendContact(contactData));
         form.reset();
       } else {
         form.reset();

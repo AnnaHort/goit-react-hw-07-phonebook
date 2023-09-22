@@ -4,11 +4,10 @@ const initialState = {
   contacts: {
     items: [],
     isLoading: false,
-    error: null
+    error: null,
   },
-  filter: ""
+  filter: '',
 };
-
 
 const contactSlice = createSlice({
   name: 'contacts',
@@ -23,10 +22,13 @@ const contactSlice = createSlice({
       );
     },
     findContact(state, action) {
-        state.filter = action.payload
+      state.filter = action.payload;
+    },
+    fetchContacts(state) {
+      state.isLoading = true;
     },
   },
 });
 // експортуємо генератори екшенів та редюсер:
-export const { addContact, deleteContact, findContact } = contactSlice.actions;
+export const { addContact, deleteContact, findContact, fetchContacts } = contactSlice.actions;
 export const contactsReducer = contactSlice.reducer;
