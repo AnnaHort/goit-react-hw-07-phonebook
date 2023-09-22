@@ -7,15 +7,18 @@ import {
 } from './ContactList.styled';
 import { deleteContact, findContact } from 'redux/contactSlice';
 import { filterSelector, itemsSelector } from 'redux/selectors';
+import { useEffect } from 'react';
+import { fetchContactsData } from 'redux/operations';
 
 export const ContactList = () => {
   const items = useSelector(itemsSelector);
-  console.log('items=', items);
   const filter = useSelector(filterSelector);
-  const itemsId = items.map(item => item.id);
-  console.log('itemsId =', itemsId);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContactsData());
+  }, [dispatch]);
 
   const handleDelete = contactId => {
     dispatch(deleteContact(contactId));
