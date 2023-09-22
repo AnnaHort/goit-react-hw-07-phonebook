@@ -16,10 +16,6 @@ export const ContactList = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchContactsData());
-  }, [dispatch]);
-
   const handleDelete = contactId => {
     dispatch(deleteContact(contactId));
   };
