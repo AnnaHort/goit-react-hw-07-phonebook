@@ -7,8 +7,6 @@ import {
 } from './ContactList.styled';
 import { deleteContact, findContact } from 'redux/contactSlice';
 import { filterSelector, itemsSelector } from 'redux/selectors';
-import { useEffect } from 'react';
-import { fetchContactsData } from 'redux/operations';
 
 export const ContactList = () => {
   const items = useSelector(itemsSelector);
