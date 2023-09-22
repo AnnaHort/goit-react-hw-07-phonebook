@@ -3,8 +3,6 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://650c93b347af3fd22f67d0a8.mockapi.io';
 
-
-
 // Функція для отримання контакту з серверу--------------------------------------
 export const getContactfromServer = async () => {
   try {
@@ -28,9 +26,6 @@ export const fetchContactsData = createAsyncThunk(
     }
   }
 )
-
-
-
 
 // Функція для відправлення контакту на сервер-----------------------------------------------------------------------
 export const sendContactToServer = async contactData => {

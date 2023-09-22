@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchContactsData } from './operations';
 
 const initialState = {
   contacts: {
@@ -27,6 +28,18 @@ const contactSlice = createSlice({
     fetchContacts(state) {
       state.isLoading = true;
     },
+  },
+   // Додаємо обробку зовнішніх екшенів
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContactsData.fulfilled, (state, action) => {
+        state.contacts.items = action.payload; // Оновлення даних з серверу
+        state.contacts.isLoading = false;
+      })
+      .addCase(fetchContactsData.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.error.message;
+      });
   },
 });
 // експортуємо генератори екшенів та редюсер:
