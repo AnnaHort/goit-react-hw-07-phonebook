@@ -1,11 +1,19 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { ContactButton, ListContact, ListEl, StyledSearchInput } from './ContactList.styled';
 import { deleteContact, findContact } from 'redux/contactSlice';
-import { contactSelector, filterSelector } from 'redux/selectors';
+import { contactSelector, errorSelector, filterSelector, isLoadingSelector, itemsSelector } from 'redux/selectors';
 
 export const ContactList = () => {
   const contacts = useSelector(contactSelector);
+  console.log(contacts);
+  const items = useSelector(itemsSelector);
+  console.log(items);
   const filter = useSelector(filterSelector);
+  console.log(filter);
+  const isLoading = useSelector(isLoadingSelector);
+  console.log(isLoading);
+  const error = useSelector(errorSelector)
+  console.log(error);
 
   const dispatch = useDispatch();
 
@@ -19,8 +27,8 @@ export const ContactList = () => {
     dispatch(findContact(inputValue));
 
     if (filter && filter !== '') {
-      contacts.filter(contact =>
-        contact.name.toLowerCase().includes(inputValue.toLowerCase())
+      items.filter(item =>
+        item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
     }
   };
@@ -35,15 +43,15 @@ export const ContactList = () => {
         onChange={handleChange}
       />
       <ListContact>
-        {contacts
-          .filter(contact =>
-            contact.name.toLowerCase().includes(filter.toLowerCase())
+        {items
+          .filter(items =>
+            items.name.toLowerCase().includes(filter.toLowerCase())
           )
-          .map(contact => (
-            <ListEl key={contact.id}>
-              <p>{contact.name}:</p>
-              <p> {contact.phoneNumber}</p>
-              <ContactButton onClick={() => handleDelete(contact.id)}>Delete</ContactButton>
+          .map(items => (
+            <ListEl key={items.id}>
+              <p>{items.name}:</p>
+              <p> {items.phoneNumber}</p>
+              <ContactButton onClick={() => handleDelete(items.id)}>Delete</ContactButton>
             </ListEl>
           ))}
       </ListContact>

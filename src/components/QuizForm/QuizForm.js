@@ -2,10 +2,10 @@ import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddContactBtn, Container, InputEl, StyledForm } from './QuizForm.styled';
 import { addContact } from 'redux/contactSlice';
-import { contactSelector } from 'redux/selectors';
+import { itemsSelector } from 'redux/selectors';
 
 export const QuizForm = () => {
-  const contacts = useSelector(contactSelector);
+  const items = useSelector(itemsSelector);
   const dispatch = useDispatch();
 
   const handleFormSubmit = e => {
@@ -13,7 +13,9 @@ export const QuizForm = () => {
 
     const form = e.target;
     const newName = form.elements.name.value;
-    const newPhoneNumber = form.elements.contacts.value;
+    console.log(newName)
+    const newPhoneNumber = form.elements.contacts.value; 
+    console.log(newPhoneNumber)
 
     const contactData = {
       name: newName,
@@ -22,10 +24,10 @@ export const QuizForm = () => {
     };
 
     if (contactData.name !== '' && contactData.phoneNumber !== '') {
-      const contactExists = contacts.some(
-        contact =>
-          contact.name === contactData.name &&
-          contact.phoneNumber === contactData.phoneNumber
+      const contactExists = items.some(
+        item =>
+        item.name === contactData.name &&
+        item.phoneNumber === contactData.phoneNumber
       );
 
       if (!contactExists) {
