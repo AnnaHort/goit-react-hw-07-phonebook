@@ -11,11 +11,13 @@ import { deleteServerContact } from 'redux/operations';
 
 export const ContactList = () => {
   const items = useSelector(itemsSelector);
+    console.log(items)
   const filter = useSelector(filterSelector);
 
   const dispatch = useDispatch();
 
   const handleDelete = contactId => {
+    console.log(contactId)
     dispatch(deleteServerContact(contactId))
       .then(() => {
         dispatch(deleteContact(contactId));
@@ -50,11 +52,12 @@ export const ContactList = () => {
           .filter(items =>
             items.name.toLowerCase().includes(filter.toLowerCase())
           )
-          .map(items => (
-            <ListEl key={items.id}>
-              <p>{items.name}:</p>
-              <p> {items.phoneNumber}</p>
-              <ContactButton onClick={() => handleDelete(items.id)}>
+          .map(item => (
+           
+            <ListEl key={item.id}>
+              <p>{item.name}:</p>
+              <p> {item.phoneNumber}</p>
+              <ContactButton onClick={() => handleDelete(item.id)}>
                 Delete
               </ContactButton>
             </ListEl>
