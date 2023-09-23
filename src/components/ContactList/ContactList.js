@@ -5,38 +5,33 @@ import {
   ListEl,
   StyledSearchInput,
 } from './ContactList.styled';
-import { deleteContact, findContact } from 'redux/contactSlice';
-import { filterSelector, itemsSelector } from 'redux/selectors';
-import { deleteServerContact } from 'redux/operations';
+import { useEffect } from 'react';
+import { deleteTask, fetchTasks } from 'redux/operations';
+import { getTasks, selectFilter } from 'redux/selectors';
+import { findContact } from 'redux/contactSlice';
 
-export const ContactList = () => {
-  const items = useSelector(itemsSelector);
-    console.log(items)
-  const filter = useSelector(filterSelector);
-
+export const ContactList = ({ item }) => {
   const dispatch = useDispatch();
+  const filter = useSelector(selectFilter);
 
-  const handleDelete = contactId => {
-    console.log(contactId)
-    dispatch(deleteServerContact(contactId))
-      .then(() => {
-        dispatch(deleteContact(contactId));
-      })
-      .catch(error => {
-        console.error('Failed to delete contact from server', error);
-      });
-  }
+  // Отримуємо частини стану
+  const { items, isLoading, error } = useSelector(getTasks);
 
-  const handleChange = e => {
-    const inputValue = e.target.value;
-    dispatch(findContact(inputValue));
+  // Викликаємо операцію
+  useEffect(() => {
+    dispatch(fetchTasks());
+  }, [dispatch]);
 
-    if (filter && filter !== '') {
-      items.filter(item =>
-        item.name.toLowerCase().includes(inputValue.toLowerCase())
-      );
-    }
+  // Операція видалення
+  const handleDelete = item => {
+    dispatch(deleteTask(item.id));
   };
+
+  // Фільтрація контактів
+  const filteredItems = items.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
 
   return (
     <>
@@ -45,23 +40,25 @@ export const ContactList = () => {
         type="text"
         name="filter"
         placeholder="Search by name"
-        onChange={handleChange}
+        value={filter}
+        onChange={e => dispatch(findContact(e.target.value))}
       />
       <ListContact>
-        {items
-          .filter(items =>
-            items.name.toLowerCase().includes(filter.toLowerCase())
-          )
-          .map(item => (
-           
-            <ListEl key={item.id}>
-              <p>{item.name}:</p>
-              <p> {item.phoneNumber}</p>
-              <ContactButton onClick={() => handleDelete(item.id)}>
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>Error: {error.message}</p>
+        ) : (
+          filteredItems.map(contact => (
+            <ListEl key={contact.id}>
+              <p>{contact.name}</p>
+              <p>{contact.phone}</p>
+              <ContactButton onClick={() => handleDelete(contact)}>
                 Delete
               </ContactButton>
             </ListEl>
-          ))}
+          ))
+        )}
       </ListContact>
     </>
   );

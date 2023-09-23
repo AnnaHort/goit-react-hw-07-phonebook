@@ -1,15 +1,14 @@
-import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
 import { AddContactBtn, Container, InputEl, StyledForm } from './QuizForm.styled';
-import { addContact } from 'redux/contactSlice';
-import { itemsSelector } from 'redux/selectors';
-import { sendContact } from 'redux/operations';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTask } from 'redux/operations';
+import { selectItems } from 'redux/selectors';
+
 
 export const QuizForm = () => {
-  const items = useSelector(itemsSelector);
   const dispatch = useDispatch();
-
-  const handleFormSubmit = e => {
+  const items = useSelector(selectItems);
+  
+  const handleSubmit = e => {
     e.preventDefault();
 
     const form = e.target;
@@ -18,20 +17,20 @@ export const QuizForm = () => {
 
     const contactData = {
       name: newName,
-      phoneNumber: newPhoneNumber,
-      id: nanoid(),
+      phone: newPhoneNumber,
     };
 
-    if (contactData.name !== '' && contactData.phoneNumber !== '') {
+    if (contactData.name !== '' && contactData.phone !== '') {
+  
       const contactExists = items.some(
         item =>
         item.name === contactData.name &&
-        item.phoneNumber === contactData.phoneNumber
+        item.phone === contactData.phone
       );
 
       if (!contactExists) {
-        dispatch(addContact(contactData));
-        dispatch(sendContact(contactData));
+
+        dispatch(addTask(contactData));
         form.reset();
       } else {
         form.reset();
@@ -46,7 +45,7 @@ export const QuizForm = () => {
   return (
     <>
       <h2>Phonebook</h2>
-      <StyledForm onSubmit={handleFormSubmit}>
+      <StyledForm onSubmit={handleSubmit}>
         <ul>
           <Container>
             <p>Name:</p>

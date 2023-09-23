@@ -1,46 +1,45 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 axios.defaults.baseURL = 'https://650c93b347af3fd22f67d0a8.mockapi.io';
 
-// отримання даних
-export const fetchContactsData = createAsyncThunk(
+export const fetchTasks = createAsyncThunk(
   'contacts/fetchAll',
+  // Використовуємо символ підкреслення як ім'я першого параметра,
+  // тому що в цій операції він нам не потрібен
   async (_, thunkAPI) => {
     try {
       const response = await axios.get('/contacts/contacts');
-
-      return  response.data;
-    } catch (error) {
-      throw error;
+      // при успішному запиті повертаємо проміс із даними
+      return response.data;
+    } catch (e) {
+      // При помилці запиту повертаємо проміс
+      // який буде відхилений з текстом помилки
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
-
-// додавання нового контакту
-export const sendContact = createAsyncThunk(
+// додавання 
+export const addTask = createAsyncThunk(
   'contacts/addContact',
-  async (contactData, thunkAPI) => {
+  async (text, thunkAPI) => {
     try {
-      const response = await axios.post('/contacts/contacts', contactData);
+      const response = await axios.post('/contacts/contacts',  text );
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
 );
-
 // видалення
-export const deleteServerContact = createAsyncThunk(
+export const deleteTask = createAsyncThunk(
   'contacts/deleteContact',
-  async (deleteContactId, thunkAPI) => {
+  async(taskId, thunkAPI) => {
     try {
-      const response = await axios.delete(
-        `/contacts/contacts/${deleteContactId}`
-      );
+      const response = await axios.delete(`/contacts/contacts/${taskId}`);
       return response.data;
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
-);
+)

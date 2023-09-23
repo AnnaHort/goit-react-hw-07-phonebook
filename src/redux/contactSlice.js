@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContactsData } from './operations';
+import { addTask, deleteTask, fetchTasks } from './operations';
 
 const initialState = {
   contacts: {
@@ -14,34 +14,54 @@ const contactSlice = createSlice({
   name: 'contacts',
   initialState: initialState,
   reducers: {
-    addContact(state, action) {
-      state.contacts.items = [...state.contacts.items, action.payload];
-    },
-    deleteContact(state, action) {
-      state.contacts.items = state.contacts.items.filter(
-        items => items.id !== action.payload
-      );
-    },
     findContact(state, action) {
       state.filter = action.payload;
     },
-    fetchContacts(state) {
-      state.isLoading = true;
+  },
+  extraReducers: {
+    [fetchTasks.pending](state) {
+      state.contacts.isLoading = true;
+    },
+    [fetchTasks.fulfilled](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = null;
+      state.contacts.items = action.payload;
+    },
+    [fetchTasks.rejected](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = action.payload;
+    },
+    [addTask.pending](state) {
+      state.contacts.isLoading = true;
+    },
+    [addTask.fulfilled](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = null;
+      state.contacts.items.push(action.payload);
+    },
+    [addTask.rejected](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = action.payload;
+    },
+    [deleteTask.pending](state) {
+      state.contacts.isLoading = true;
+    },
+    [deleteTask.fulfilled](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = null;
+
+      const index = state.contacts.items.findIndex(
+        item => item.id === action.payload.id
+      );
+      state.contacts.items.splice(index, 1);
+    },
+    [deleteTask.rejected](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = action.payload;
     },
   },
-   // Додаємо обробку зовнішніх екшенів
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchContactsData.fulfilled, (state, action) => {
-        state.contacts.items = action.payload; // Оновлення даних з серверу
-        state.contacts.isLoading = false;
-      })
-      .addCase(fetchContactsData.rejected, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = action.error.message;
-      });
-  },
 });
-// експортуємо генератори екшенів та редюсер:
-export const { addContact, deleteContact, findContact, fetchContacts } = contactSlice.actions;
-export const contactsReducer = contactSlice.reducer;
+
+// export const contactsReducer = contactSlice.reducer;
+export const { reducer: contactsReducer, actions } = contactSlice;
+export const { findContact } = actions;
