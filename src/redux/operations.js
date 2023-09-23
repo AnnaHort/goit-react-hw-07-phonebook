@@ -3,7 +3,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://650c93b347af3fd22f67d0a8.mockapi.io';
 
-// Створюємо async thunk за допомогою createAsyncThunk
+// отримання даних
 export const fetchContactsData = createAsyncThunk(
   'contacts/fetchAll',
   async (_, thunkAPI) => {
@@ -17,7 +17,7 @@ export const fetchContactsData = createAsyncThunk(
   }
 );
 
-// Створюємо async thunk за допомогою createAsyncThunk
+// додавання нового контакту
 export const sendContact = createAsyncThunk(
   'contacts/addContact',
   async (contactData, thunkAPI) => {
@@ -30,7 +30,7 @@ export const sendContact = createAsyncThunk(
   }
 );
 
-// Створюємо async thunk за допомогою createAsyncThunk
+// видалення
 export const deleteServerContact = createAsyncThunk(
   'contacts/deleteContact',
   async (deleteContactId, thunkAPI) => {
